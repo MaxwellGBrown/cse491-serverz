@@ -27,6 +27,7 @@ while True:
     c, (client_host, client_port) = s.accept()
     print c.recv(1000)
     print 'Got connection from', client_host, client_port
-    c.send('HTTP/1.0 200 OK\nContent-Type: text/html\n\n')
+# @MGB There were two LF's (\n) instead of a CRLF (\r\n) after text/html
+    c.send('HTTP/1.0 200 OK\nContent-Type: text/html\r\n')
     c.send('<h1>Hello World!</h1> this is sarteleb\'s web server.')
     c.close()
