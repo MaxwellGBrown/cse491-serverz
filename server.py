@@ -3,18 +3,11 @@ import random
 import socket
 import time
 import urlparse
-
-
-# Define these global variables, because
-host = str()
-port = int()
     
 def main():
     s = socket.socket()         # Create a socket object
 
-    global host
     host = socket.getfqdn() # Get local machine name
-    global port
     port = random.randint(8000, 9999)
     
     s.bind((host, port))        # Bind to the port
@@ -94,7 +87,8 @@ def form(values):
 def submit(values):
     
     names = values
-        
+
+##    now happens before passing values into function        
 ##    names = (values.rsplit('&')[0].rsplit('=')[1],\
 ##             values.rsplit('&')[1].rsplit('=')[1])
     
@@ -104,6 +98,7 @@ def submit(values):
                  '<h2>Submit</h2>'
                  
     return return_str
+
 
 
 
@@ -141,13 +136,8 @@ def handle_connection(conn):
     page_request = request_data.splitlines()[0].rsplit(' ')[1] # prints the page requested (1st line, 2nd word)
 
     print request_type + ' ' + page_request
-
-
-    ## create a full url string for url parse
-    url = "http://%s:%s%s" % (host, port, page_request)
-##    print "URL: %s" % (url)
-
-    parsed_url = urlparse.urlparse(url)
+    
+    parsed_url = urlparse.urlparse(page_request)
 
     
     ## initialize html_text
@@ -193,6 +183,7 @@ def handle_connection(conn):
             ## only with GET
             
             html_text = submit(values)
+        
 
 
     elif request_type == "POST":

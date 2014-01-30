@@ -120,6 +120,7 @@ def test_handle_connection_submit_GET():
 
     assert conn.sent == expected_return, 'Got: %s' % (repr(conn.sent),)
 
+
 def test_handle_connection_submit_POST():
     firstname = "John"
     lastname = "Smith"
@@ -136,6 +137,7 @@ def test_handle_connection_submit_POST():
     server.handle_connection(conn)
 
     assert conn.sent == expected_return, 'Got: %s' % (repr(conn.sent),)
+
 
 def test_handle_connection_POST():
     conn = FakeConnection("POST / HTTP/1.0\r\n\r\n")
