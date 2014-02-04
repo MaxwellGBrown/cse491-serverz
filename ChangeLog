@@ -1,3 +1,24 @@
+2014-01-30  Maxwell Brown
+
+* Removed the awful global vairalbes of host and port
+
+2014-01-27  Maxwell Brown
+
+* Split pages into seperate functions
+* Declared port and host as global functions to be accessed
+  in both the handle_connection and in main
+* Created /form and /submit pages, and their respective tests
+* Defined split_values to handle URL parsing for /form and /submit
+  and possibly future use
+* Enabled POST requests for /submit, and changed /form to a POST
+* CONCERN: Should the arguement for all the pages be the variables 
+           in dict form? Or should those be sorted out inside the
+           page function?
+
+2014-01-25  Maxwell Brown
+
+* Cloned hw3 branch
+
 2014-01-21  Maxwell Brown
 
 * Made seperate functions for test_server.py
