@@ -1,3 +1,42 @@
+2014-02-06  Maxwell Brown
+
+* Changed server_tests.py to not be frustrating
+* Did heavy remodel of code based off of brtaylor92
+* Tried rendering with Jinja2, broke tests
+
+
+2014-02-05  Maxwell Brown
+
+* Added <p> tags to my html
+* Started making templates (/index, /file, and /image done)
+
+2014-02-04  Maxwell Brown
+
+* Now sort recv text with StringIO and FieldStorage
+* Store HTTP Headers in FieldStorage
+! Tried and failed to implement return HTML using FieldStorage
+
+2014-02-03  Maxwell Brown
+
+* Added docstrings for most functions 
+  (not the ones that returned long strings, to avoid confusion)
+* Implemented read_connection function to do block reading on 
+  connections with conn.recv
+? Created a handler in the server.py for the FakeConnection to handle
+  conn.settimeout(n). It works in the browser but not nosetests.
+? Created FakeConnection.timeout and FakeConnection.settimeout(n)
+  for the conn.settimeout(n) in read_connection(conn). Needed?
+* Initialized templates directory
+* Added 404 handling in server.py and server_tests.py
+
+2014-01-31  Maxwell Brown
+
+* Reorganized code and removed unneeded comments
+* Edited code to do conn.send in the page functions instead of
+  at the end of the handle_conn function. This allows for 
+  implementation of 404 handler, and easier flow of code
+  for hw4 changes.
+
 2014-01-30  Maxwell Brown
 
 * Removed the awful global vairalbes of host and port
