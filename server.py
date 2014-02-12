@@ -12,6 +12,9 @@ import cgi
 import jinja2
 import os
 
+## for the wsgi app
+import app
+
 
 ##
 ## HANDLE CONNECTION DEFINITION
@@ -34,71 +37,50 @@ def handle_connection(conn):
     for line in data.split('\r\n')[:-2]:
 	k, v = line.split(': ',1)
 	headers[k.lower()] = v
-	
-    # Parse path and related info
-    path = urlparse(request.split(' ', 3)[1])
     
-    # corrospond requests to .html files
-    response = {
-		'/'		: 'index.html',		\
-		'/content'	: 'content.html',	\
-		'/file'		: 'file.html',		\
-		'/image'	: 'image.html',		\
-		'/form'		: 'form.html',		\
-		'/submit'	: 'submit.html',	\
-		}
+    # parse path and query string as urlparse object
+    # parsed_url[2] = path, parsed_url[4] = query string
+    parsed_url = urlparse(request.split(' ', )[1])
     
-    # setup and run jinja2 templates
-    loader = jinja2.FileSystemLoader('./templates')
-    env = jinja2.Environment(loader=loader)
-    response_header =	'HTTP/1.0 200 OK\r\n' + \
-			'Content-type: text/html\r\n\r\n'
+    #initialize environ dictionary
+    environ = {}
+    
+    environ['PATH_INFO'] = parsed_url[2]
+    environ['QUERY_STRING'] = parsed_url[4]
+    
+    # Handle reading of POST data
     content = ''
-    
-    # path[4] corrosponds to field=value, and parse_qs handles that
-    values = parse_qs(path[4])
-    
     if request.startswith('POST '):
+	environ['REQUEST_METHOD'] = 'POST'
+	environ['CONTENT_LENGTH'] = headers['content-length']
+	environ['CONTENT_TYPE'] = headers['content-type']
+	# read the remaining data from http request to construct wsgi.input
 	while len(content) < int(headers['content-length']):
 	    content += conn.recv(1)
     
-    environ = {'REQUEST_METHOD' : 'POST'}
-    form = cgi.FieldStorage(fp=StringIO(content), headers=headers, environ=environ)
-    
-    print 'form made!'
-    
-    # add the newly found values into the parse_qs object
-    new_values = {}
-    for key in form.keys():
-	new_values[key] = form[key].value
-
-    values.update(new_values)
-    
-    print 'values updated!'
-    
-    # Try to connect to requested page
-    if path[2] in response:
-	template = env.get_template(response[path[2]])
     else:
-	values['page'] = path[2]
-	response_header = 'HTTP/1.0 404 Not Found\r\n\r\n'
-	template = env.get_template('404.html')
+	environ['REQUEST_METHOD'] = 'GET'
+	environ['CONTENT_LENGTH'] = 0
     
-    print 'tried '+path[2]
+    #form = cgi.FieldStorage(fp=StringIO(content), headers=headers, environ=environ)
+    environ['wsgi.input'] = cgi.FieldStorage(fp=StringIO(content), 
+					      headers = headers,
+					      environ = {'REQUEST_METHOD':'POST'} )
+    print 'wsgi.input made!'
     
-    # use jinja2's render to get the return string
-    response_content = template.render(values)   
     
-    # send response_header to client
-    conn.send(response_header)
-    # send response_content (aka, html) to client
-    conn.send(response_content)
+    def start_response(status, response_headers):
+	conn.send('HTTP/1.0 %s\r\n' % status)
+	for header in response_headers:
+	    conn.send('%s: %s\r\n' % header)
+	conn.send('\r\n')
     
+    response_html = app.simple_app(environ, start_response)
+    conn.send(response_html)
     print 'conn sent!'
     
     # close the connection
     conn.close()
-    
     print 'conn closed!'
 	
 

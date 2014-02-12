@@ -91,7 +91,7 @@ def test_handle_connection_submit_GET():
 
 def test_handle_connection_GET_404():
     conn = FakeConnection("GET /404 HTTP/1.0\r\n\r\n")
-    expected_return = 'HTTP/1.0 404 Not Found\r\n\r\n'
+    expected_return = 'HTTP/1.0 404 Not Found'
     
     server.handle_connection(conn)
 
@@ -113,7 +113,7 @@ def test_handle_connection_submit_POST_urlencoded():
     
     server.handle_connection(conn)
 
-    assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
+    assert (conn.sent.startswith(expected_return) and conn.sent.find('Hello Joe Schmoe') ), 'Got: %s' % (repr(conn.sent),)
     
 
 def test_handle_connection_POST_404():
