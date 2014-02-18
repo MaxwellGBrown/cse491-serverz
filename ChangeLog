@@ -1,6 +1,10 @@
 2014-02-18  Maxwell Brown
 
 * Moved the fieldstorage to app.py from server.py
+* Added server-qx.py to check for standard WSGI compatability
+* Changed app.py to return a list/generator and server.py
+  to handle the return of a list/generator
+
 
 2014-02-11  Maxwell Brown
 

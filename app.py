@@ -74,8 +74,9 @@ def simple_app(environ, start_response):
     # use jinja2's render to get the return string
     response_content = template.render(values).encode('latin-1', 'replace')
     
-    # return a string which will be sent in the handle connection function
-    return response_content
+    # return a list (actually a generator)
+    # which will be sent in the handle connection function
+    return list(response_content)
     
     
     
