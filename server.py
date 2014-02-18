@@ -63,9 +63,11 @@ def handle_connection(conn):
 	environ['CONTENT_LENGTH'] = 0
     
     #form = cgi.FieldStorage(fp=StringIO(content), headers=headers, environ=environ)
-    environ['wsgi.input'] = cgi.FieldStorage(fp=StringIO(content), 
-					      headers = headers,
-					      environ = {'REQUEST_METHOD':'POST'} )
+   
+    #environ['wsgi.input'] = cgi.FieldStorage(fp=StringIO(content), 
+					      #headers = headers,
+					      #environ = {'REQUEST_METHOD':'POST'} )
+    environ['wsgi.input'] = StringIO(content)
     print 'wsgi.input made!'
     
     

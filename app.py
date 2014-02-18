@@ -1,6 +1,10 @@
 ## for parsing path and query string
 from urlparse import urlparse, parse_qs
 
+## for fieldstorage
+from StringIO import StringIO
+import cgi
+
 ## for the templates
 import jinja2
 import os
@@ -29,13 +33,19 @@ def simple_app(environ, start_response):
     # initialize empty dictionary for POST requests that can be updated
     # with the contents of the awful cgi thing
     new_values = {}
+    
+    # create field storage object
+    WSGIinput = cgi.FieldStorage(fp=environ['wsgi.input'], 
+		 headers = environ,
+		 environ = {'REQUEST_METHOD':'POST'} )
+		      
     if environ['REQUEST_METHOD'] is 'POST':
       
-	print "environ['wsgi.input'].keys()"
-	print environ['wsgi.input'].keys()
+	print "WSGIinput.keys()"
+	print WSGIinput.keys()
 	
-	for key in environ['wsgi.input'].keys():
-	    new_values[key] = environ['wsgi.input'][key].value
+	for key in WSGIinput.keys():
+	    new_values[key] = WSGIinput[key].value
 	    print "%s = %s \r\n" % (key, new_values[key])
 	
 	values.update(new_values)
