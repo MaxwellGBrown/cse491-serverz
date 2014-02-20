@@ -1,3 +1,19 @@
+2014-02-18  Maxwell Brown
+
+* Moved the fieldstorage to app.py from server.py
+* Added server-qx.py to check for standard WSGI compatability
+* Changed app.py to return a list/generator and server.py
+  to handle the return of a list/generator
+
+
+2014-02-11  Maxwell Brown
+
+* Added app.py and moved content creation from server.py to it
+* Refactored for environ dictionary
+* defined start_response inside handle_connection
+* added a base template and refactored old templates accordingly
+* added titles to all templates
+
 2014-02-06  Maxwell Brown
 
 * Changed server_tests.py to not be frustrating
