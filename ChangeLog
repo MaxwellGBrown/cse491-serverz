@@ -1,3 +1,10 @@
+2014-02-19  Maxwell Brown
+
+* Added file opening function in app.py
+* Added file.txt and image.jpg for their respective files
+* Changed the returning of data in app.py; data builds
+  earlier rather than at the end
+
 2014-02-18  Maxwell Brown
 
 * Moved the fieldstorage to app.py from server.py

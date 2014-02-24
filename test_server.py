@@ -41,7 +41,7 @@ def test_handle_connection_index():
 def test_handle_connection_file():
     conn = FakeConnection("GET /file HTTP/1.0\r\n\r\n")
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
-                      'Content-type: text/html\r\n\r\n'
+                      'Content-type: text/plain\r\n\r\n'
 
     server.handle_connection(conn)
 
@@ -59,7 +59,7 @@ def test_handle_connection_content():
 def test_handle_connection_image():
     conn = FakeConnection("GET /image HTTP/1.0\r\n\r\n")
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
-                      'Content-type: text/html\r\n\r\n'
+                      'Content-type: image/jpeg\r\n\r\n'
 
     server.handle_connection(conn)
 

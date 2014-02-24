@@ -60,9 +60,26 @@ def simple_app(environ, start_response):
 	values['page'] = environ['PATH_INFO']
 	response_status = '404 Not Found'
 	template = jinja2_environment.get_template('404.html')
-  
-    # set response_headers to text/html since that's all we've got for now
-    response_headers = [('Content-type', 'text/html')]
+    
+    # initialize return data
+    data = []
+    # set response_headers depending on the page content type
+    if environ['PATH_INFO'] == '/image':
+      response_headers = [('Content-type', 'image/jpeg')]
+      # return image
+      data.append(open_file('image.jpg') )
+      
+    elif environ['PATH_INFO'] == '/file':
+      response_headers = [('Content-type', 'text/plain')]
+      # return text file
+      data.append(open_file('file.txt') )
+      
+    else:
+      response_headers = [('Content-type', 'text/html')]
+      # load template depending on the PATH_INFO
+      # using jinja2's render to get the return string
+      response_html = template.render(values).encode('latin-1', 'replace')
+      data.append(response_html)
     
     print 'tried '+ environ['PATH_INFO']
     
@@ -71,14 +88,18 @@ def simple_app(environ, start_response):
     # does the app.send() for the status and headers
     start_response(response_status, response_headers)
     
-    # use jinja2's render to get the return string
-    response_content = template.render(values).encode('latin-1', 'replace')
     
-    # return a list (actually a generator)
+    
+    # return a list (actually a generator) titled data
     # which will be sent in the handle connection function
-    return list(response_content)
+    return data
     
-    
+def open_file(file_name):
+  '''Takes string of file name, returns open().read() as object'''
+  file_obj = open(file_name, "rb")
+  data = file_obj.read();
+  file_obj.close()
+  return data
     
 # still needed?
 def make_app():
