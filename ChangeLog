@@ -5,6 +5,7 @@
 * Added arbitrary SCRIPT_NAME and SERVER_NAME for server-imageapp.py
   Also added the same in server.py
 * Fixed some inconsistancies in the templates
+* Edited the README.txt to denote what the different server.py's do
 
 2014-02-19  Maxwell Brown
 
