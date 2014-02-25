@@ -13,21 +13,18 @@ import jinja2
 import os
 
 ## for the wsgi app
-import app
+# import app
 
+## to run imageapp
 import quixote
-from quixote.demo import create_publisher
-from quixote.demo.mini_demo import create_publisher
-from quixote.demo.altdemo import create_publisher
+import imageapp
 
+imageapp.setup()
+p = imageapp.create_publisher()
 
-_the_app = None
 def make_app():
-    global _the_app
-    if _the_app is None:
-        p = create_publisher()
-        _the_app = quixote.get_wsgi_app()
-    return _the_app
+    return quixote.get_wsgi_app()
+
 
 ##
 ## HANDLE CONNECTION DEFINITION
@@ -60,7 +57,10 @@ def handle_connection(conn):
     
     environ['PATH_INFO'] = parsed_url[2]
     environ['QUERY_STRING'] = parsed_url[4]
+    # temporary 'SCRIPT_NAME' entry
     environ['SCRIPT_NAME'] = ''
+    # temporary 'SERVER_NAME' entry for arctic
+    environ['SERVER_NAME'] = 'arctic.cse.msu.edu'
     
     # Handle reading of POST data
     content = ''
@@ -90,14 +90,13 @@ def handle_connection(conn):
 	for header in response_headers:
 	    conn.send('%s: %s\r\n' % header)
 	conn.send('\r\n')
-    
-    # create the app
+	
+    # make the app	
     application = make_app()
     
     response_html = application(environ, start_response)
     for html in response_html:
         conn.send(html)
-        
     print 'conn sent!'
     
     # close the connection

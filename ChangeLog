@@ -1,3 +1,11 @@
+2014-02-24  Maxwell Brown
+
+* Added a server-imageapp.py to run imageapp
+* Changed index template of imageapp to show most recent image
+* Added arbitrary SCRIPT_NAME and SERVER_NAME for server-imageapp.py
+  Also added the same in server.py
+* Fixed some inconsistancies in the templates
+
 2014-02-19  Maxwell Brown
 
 * Added file opening function in app.py
