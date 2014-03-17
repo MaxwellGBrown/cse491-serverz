@@ -47,6 +47,8 @@ def handle_connection(conn):
     
     environ['PATH_INFO'] = parsed_url[2]
     environ['QUERY_STRING'] = parsed_url[4]
+    # temporary 'SCRIPT_NAME' entry
+    environ['SCRIPT_NAME'] = ''
     
     # Handle reading of POST data
     content = ''
