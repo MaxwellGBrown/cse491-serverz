@@ -52,8 +52,8 @@ def handle_connection(conn, application):
     # temporary 'SCRIPT_NAME' entry
     environ['SCRIPT_NAME'] = ''
     # temporary 'SERVER_NAME' entry
-    environ['SERVER_NAME'] = 'localhost'
-    
+    #environ['SERVER_NAME'] = 'arctic.cse.msu.edu'
+
     # Handle reading of POST data
     content = ''
     if request.startswith('POST '):
@@ -68,13 +68,9 @@ def handle_connection(conn, application):
 	environ['REQUEST_METHOD'] = 'GET'
 	environ['CONTENT_LENGTH'] = 0
     
-    #form = cgi.FieldStorage(fp=StringIO(content), headers=headers, environ=environ)
-   
-    #environ['wsgi.input'] = cgi.FieldStorage(fp=StringIO(content), 
-					      #headers = headers,
-					      #environ = {'REQUEST_METHOD':'POST'} )
+    
     environ['wsgi.input'] = StringIO(content)
-    print 'wsgi.input made!'
+    # print 'wsgi.input made!'
     
     
     def start_response(status, response_headers):
@@ -89,11 +85,11 @@ def handle_connection(conn, application):
     response_html = application(environ, start_response)
     for html in response_html:
         conn.send(html)
-    print 'conn sent!'
+    # print 'conn sent!'
     
     # close the connection
     conn.close()
-    print 'conn closed!'
+    # print 'conn closed!'
 	
 
 
