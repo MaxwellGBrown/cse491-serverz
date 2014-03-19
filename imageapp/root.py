@@ -26,7 +26,7 @@ class RootDirectory(Directory):
 
         image.add_image(data)
 
-        return quixote.redirect('./')
+        return quixote.redirect('index.html')
 
     @export(name='image')
     def image(self):

@@ -1,3 +1,15 @@
+2014-03-18  Maxwell Brown
+
+* Learned how to use showforms on twill. REMEMBER THIS!
+
+* Builds different apps depending on command line arguments
+* Removed old and now unneeded server.py's. Changed server.py to hw6.py
+* Downloaded twill & added twill-tests for imageapp and quixote
+
+2014-03-16  Maxwell Brown
+
+* Added command line arguments using argparse
+
 2014-02-24  Maxwell Brown
 
 * Added a server-imageapp.py to run imageapp

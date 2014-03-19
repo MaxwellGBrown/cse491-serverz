@@ -15,11 +15,13 @@ import os
 ## for the wsgi app
 import app
 
+## for argparse
+import argparse
 
 ##
 ## HANDLE CONNECTION DEFINITION
 ##
-def handle_connection(conn):
+def handle_connection(conn, application):
     
     # Start reading in data from the connection
     read = conn.recv(1)
@@ -49,6 +51,8 @@ def handle_connection(conn):
     environ['QUERY_STRING'] = parsed_url[4]
     # temporary 'SCRIPT_NAME' entry
     environ['SCRIPT_NAME'] = ''
+    # temporary 'SERVER_NAME' entry
+    environ['SERVER_NAME'] = 'localhost'
     
     # Handle reading of POST data
     content = ''
@@ -80,7 +84,7 @@ def handle_connection(conn):
 	conn.send('\r\n')
 	
     # make the app	
-    application = app.make_app()
+    # application = app.make_app()
     
     response_html = application(environ, start_response)
     for html in response_html:
@@ -100,24 +104,62 @@ def handle_connection(conn):
 ##
 
 def main():
+    
+    # handle command line arguments
+    parser = argparse.ArgumentParser(description='Run WSGI apps' + \
+				      'by brown308/MaxwellgBrown')
+    parser.add_argument('-A', '--app', default='hw6', nargs='?', \
+			help='Choose a WSGI app to run')
+    parser.add_argument('-p', '--port', type=int, help='Choose a port for server', \
+			 default=random.randint(8000,9999), nargs='?')
+    args = parser.parse_args()
+    # print args ## print statement to check the arguments
+    
+    # build WSGI that is the argument, default app.py
+    print 'Using %s as WSGI app...'%(args.app)
+    
     s = socket.socket()         # Create a socket object
     host = socket.getfqdn()     # Get local machine name
-    port = random.randint(8000, 9999)
+    port = args.port            # Use port from command line argument 
     s.bind((host, port))        # Bind to the port
+    
+    
+    wsgi_app = None
+    if args.app == "hw6":
+        import hw6
+        wsgi_app = hw6.make_app()
+    if args.app == "hw8":
+        import hw8.oswd
+        wsgi_app = hw8.oswd.make_app()
+    elif args.app == "imageapp":
+        ## to run imageapp
+	import quixote
+	import imageapp
+
+	imageapp.setup()
+	p = imageapp.create_publisher()
+	wsgi_app = quixote.get_wsgi_app()
+    elif args.app == "quixote.demo.altdemo":
+	import quixote
+	# from quixote.demo import create_publisher
+	# from quixote.demo.mini_demo import create_publisher
+	from quixote.demo.altdemo import create_publisher
+        p = create_publisher()
+        wsgi_app = quixote.get_wsgi_app()
+        
     print 'Starting server on', host, port
     print 'The Web server URL for this would be http://%s:%d/' % (host, port)
     s.listen(5)                 # Now wait for client connection.
     print 'Entering infinite loop; hit CTRL-C to exit'
     
     while True:
-
         # Ctrl+C KeyboardInterrupt error handler
         try:
             # Establish connection with client.
             c, (client_host, client_port) = s.accept()
             print 'Got connection from', client_host, client_port
             # handle connection to serve page
-            handle_connection(c)
+            handle_connection(c, wsgi_app)
 
             
         except (KeyboardInterrupt):
