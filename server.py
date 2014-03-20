@@ -15,13 +15,16 @@ import os
 ## for the wsgi app
 import app
 
+## for wsgiref validator
+from wsgiref.validate import validator
+
 ## for argparse
 import argparse
 
 ##
 ## HANDLE CONNECTION DEFINITION
 ##
-def handle_connection(conn, application):
+def handle_connection(conn, host, port, application):
     
     # Start reading in data from the connection
     read = conn.recv(1)
@@ -52,7 +55,14 @@ def handle_connection(conn, application):
     # temporary 'SCRIPT_NAME' entry
     environ['SCRIPT_NAME'] = ''
     # temporary 'SERVER_NAME' entry
-    #environ['SERVER_NAME'] = 'arctic.cse.msu.edu'
+    environ['SERVER_NAME'] = host
+    environ['SERVER_PORT'] = str(port)
+    environ['wsgi.version'] = (1, 0)
+    environ['wsgi.multithread'] = False
+    environ['wsgi.multiprocess'] = False
+    environ['wsgi.run_once'] = False
+    environ['wsgi.url_scheme'] = 'http'
+    environ['HTTP_COOKIE'] = headers['cookie'] if 'cookie' in headers.keys() else ''
 
     # Handle reading of POST data
     content = ''
@@ -121,20 +131,22 @@ def main():
     
     
     wsgi_app = None
-    if args.app == "hw6":
-        import hw6
-        wsgi_app = hw6.make_app()
-    if args.app == "hw8":
+    if args.app == "app":
+        import app
+        wsgi_app = app.make_app()
+        
+    elif args.app == "hw8":
         import hw8.oswd
         wsgi_app = hw8.oswd.make_app()
+        
     elif args.app == "imageapp":
         ## to run imageapp
 	import quixote
 	import imageapp
-
 	imageapp.setup()
 	p = imageapp.create_publisher()
 	wsgi_app = quixote.get_wsgi_app()
+	
     elif args.app == "quixote.demo.altdemo":
 	import quixote
 	# from quixote.demo import create_publisher
@@ -142,6 +154,12 @@ def main():
 	from quixote.demo.altdemo import create_publisher
         p = create_publisher()
         wsgi_app = quixote.get_wsgi_app()
+        
+    else:
+        print "%s is not an exprected server name...\n"
+        print "Using app.py instead\n"
+        import app
+        wsgi_app = app.make_app()
         
     print 'Starting server on', host, port
     print 'The Web server URL for this would be http://%s:%d/' % (host, port)
@@ -155,7 +173,7 @@ def main():
             c, (client_host, client_port) = s.accept()
             print 'Got connection from', client_host, client_port
             # handle connection to serve page
-            handle_connection(c, wsgi_app)
+            handle_connection(c, host, port, wsgi_app)
 
             
         except (KeyboardInterrupt):
