@@ -1,4 +1,5 @@
 import server
+import app
 
 class FakeConnection(object):
     """
@@ -33,7 +34,7 @@ def test_handle_connection_index():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: text/html\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 
@@ -43,7 +44,7 @@ def test_handle_connection_file():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: text/plain\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 
@@ -52,7 +53,7 @@ def test_handle_connection_content():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: text/html\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 
@@ -61,7 +62,7 @@ def test_handle_connection_image():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: image/jpeg\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)                             
 
@@ -70,7 +71,7 @@ def test_handle_connection_form():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: text/html\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 
@@ -83,7 +84,7 @@ def test_handle_connection_submit_GET():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                       'Content-type: text/html\r\n\r\n'
 
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
                           
@@ -93,7 +94,7 @@ def test_handle_connection_GET_404():
     conn = FakeConnection("GET /404 HTTP/1.0\r\n\r\n")
     expected_return = 'HTTP/1.0 404 Not Found'
     
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 
@@ -111,7 +112,7 @@ def test_handle_connection_submit_POST_urlencoded():
     expected_return = 'HTTP/1.0 200 OK\r\n' + \
                           'Content-type: text/html\r\n\r\n'
     
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert (conn.sent.startswith(expected_return) and conn.sent.find('Hello Joe Schmoe') ), 'Got: %s' % (repr(conn.sent),)
     
@@ -122,7 +123,7 @@ def test_handle_connection_POST_404():
                           "Content-Length: 0\r\n\r\n")
     expected_return = 'HTTP/1.0 404 Not Found\r\n'
     
-    server.handle_connection(conn)
+    server.handle_connection(conn, 80, app.make_app())
 
     assert conn.sent.startswith(expected_return), 'Got: %s' % (repr(conn.sent),)
 

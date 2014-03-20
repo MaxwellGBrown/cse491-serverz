@@ -6,3 +6,7 @@ code 200
 go /image
 code 200
 find "Here is your image:"
+
+go /style.css
+code 200
+find "CSS Document"

@@ -24,7 +24,7 @@ import argparse
 ##
 ## HANDLE CONNECTION DEFINITION
 ##
-def handle_connection(conn, host, port, application):
+def handle_connection(conn, port, application):
     
     # Start reading in data from the connection
     read = conn.recv(1)
@@ -55,7 +55,7 @@ def handle_connection(conn, host, port, application):
     # temporary 'SCRIPT_NAME' entry
     environ['SCRIPT_NAME'] = ''
     # temporary 'SERVER_NAME' entry
-    environ['SERVER_NAME'] = host
+    environ['SERVER_NAME'] = socket.getfqdn()
     environ['SERVER_PORT'] = str(port)
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.multithread'] = False
@@ -88,12 +88,10 @@ def handle_connection(conn, host, port, application):
 	for header in response_headers:
 	    conn.send('%s: %s\r\n' % header)
 	conn.send('\r\n')
-	
-    # make the app	
-    # application = app.make_app()
     
     response_html = application(environ, start_response)
     for html in response_html:
+        print html
         conn.send(html)
     # print 'conn sent!'
     
@@ -121,15 +119,12 @@ def main():
     args = parser.parse_args()
     # print args ## print statement to check the arguments
     
-    # build WSGI that is the argument, default app.py
-    print 'Using %s as WSGI app...'%(args.app)
-    
     s = socket.socket()         # Create a socket object
     host = socket.getfqdn()     # Get local machine name
     port = args.port            # Use port from command line argument 
     s.bind((host, port))        # Bind to the port
     
-    
+    wsgi_app_name = args.app
     wsgi_app = None
     if args.app == "app":
         import app
@@ -157,10 +152,11 @@ def main():
         
     else:
         print "%s is not an exprected server name...\n"
-        print "Using app.py instead\n"
+        wsgi_app_name = 'app'
         import app
         wsgi_app = app.make_app()
-        
+ 
+    print 'Using %s as WSGI app...'%(wsgi_app_name)
     print 'Starting server on', host, port
     print 'The Web server URL for this would be http://%s:%d/' % (host, port)
     s.listen(5)                 # Now wait for client connection.
@@ -173,7 +169,7 @@ def main():
             c, (client_host, client_port) = s.accept()
             print 'Got connection from', client_host, client_port
             # handle connection to serve page
-            handle_connection(c, host, port, wsgi_app)
+            handle_connection(c, port, wsgi_app)
 
             
         except (KeyboardInterrupt):

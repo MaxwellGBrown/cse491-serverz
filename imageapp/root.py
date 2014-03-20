@@ -26,13 +26,28 @@ class RootDirectory(Directory):
 
         image.add_image(data)
 
-        #return quixote.redirect('index.html') # was ./html
-	return html.render('index.html')
+        return quixote.redirect('/') # redirects to index
         
     @export(name='image')
     def image(self):
         return html.render('image.html')
+    
+    
+    
+    # returns stylesheet when requested
+    @export(name='style.css')
+    def style(self):
+        request = quixote.get_request()
+        request.response.set_content_type("text/css")
+        #return html.render('Flan/style.css')
+      
+	file_obj = open("./imageapp/Flan/style.css", "rb")
+	data = file_obj.read();
+	file_obj.close()
+        return data
 
+        
+        
     @export(name='image_raw')
     def image_raw(self):
         response = quixote.get_response()
