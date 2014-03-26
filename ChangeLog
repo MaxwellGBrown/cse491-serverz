@@ -1,3 +1,35 @@
+2014-03-20 *** HW8 PROJECT 1 ***
+Implemented a template found from that website in the imageapp.
+You'll notice the text is smaller and the background is periwinkle.
+The template I chose doesn't change the imageapp very much, and 
+I didn't have the time to put real designing into it, but maybe oneday
+it'll happen.
+
+* Added a test into imageapp-1 twill test 
+
+2014-03-20  Maxwell Brown
+
+* Finally found out how to fix the content type of style.css 
+    in imageapp/root.py
+
+2014-03-19  Maxwell Brown
+
+* Fixed wsgi validate and cookies by adding them
+* Created twill test for app.py
+* Fixed test_server.py to work with re-formtted handle_connection
+
+2014-03-18  Maxwell Brown
+
+* Learned how to use showforms on twill. REMEMBER THIS!
+
+* Builds different apps depending on command line arguments
+* Removed old and now unneeded server.py's. Changed server.py to hw6.py
+* Downloaded twill & added twill-tests for imageapp and quixote
+
+2014-03-16  Maxwell Brown
+
+* Added command line arguments using argparse
+
 2014-02-24  Maxwell Brown
 
 * Added a server-imageapp.py to run imageapp

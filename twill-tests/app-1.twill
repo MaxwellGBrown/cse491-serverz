@@ -1,0 +1,32 @@
+go /
+code 200
+find "Hello, world"
+
+follow content
+code 200
+find "Content"
+
+go /
+
+follow file
+code 200
+find "This is my text file"
+
+go /
+
+follow image
+code 200
+
+go /errorplz
+code 404
+
+go /
+
+follow /form
+code 200
+fv 1 firstname Jon
+fv 1 lastname Doe
+submit
+
+code 200
+find "Hello, Jon Doe"
