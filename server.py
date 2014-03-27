@@ -126,6 +126,7 @@ def main():
     
     wsgi_app_name = args.app
     wsgi_app = None
+    
     if args.app == "app":
         import app
         wsgi_app = app.make_app()
@@ -150,6 +151,14 @@ def main():
         p = create_publisher()
         wsgi_app = quixote.get_wsgi_app()
         
+    elif args.app == "quotes":
+        import quotes.apps
+	wsgi_app = quotes.apps.QuotesApp('quotes/quotes.txt', 'quotes/html')
+	
+    elif args.app == "chat":
+        import chat.apps
+	wsgi_app = chat.apps.ChatApp('chat/html')
+	
     else:
         print "%s is not an exprected server name...\n"
         wsgi_app_name = 'app'

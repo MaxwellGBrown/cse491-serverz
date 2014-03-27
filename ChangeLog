@@ -1,3 +1,8 @@
+2014-03-26  Maxwell Brown
+
+* Added __init__.py to chat and quotes
+* Implemented chat and quotes in server.py
+
 2014-03-20 *** HW8 PROJECT 1 ***
 Implemented a template found from that website in the imageapp.
 You'll notice the text is smaller and the background is periwinkle.
