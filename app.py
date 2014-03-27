@@ -41,15 +41,15 @@ def simple_app(environ, start_response):
 		      
     if environ['REQUEST_METHOD'] is 'POST':
       
-	print "WSGIinput.keys()"
+	# print "WSGIinput.keys()"
 	print WSGIinput.keys()
 	
 	for key in WSGIinput.keys():
 	    new_values[key] = WSGIinput[key].value
-	    print "%s = %s \r\n" % (key, new_values[key])
+	    # print "%s = %s \r\n" % (key, new_values[key])
 	
 	values.update(new_values)
-	print 'values updated!' 
+	# print 'values updated!' 
     
     
     # Try to connect to requested page
@@ -81,7 +81,7 @@ def simple_app(environ, start_response):
       response_html = template.render(values).encode('latin-1', 'replace')
       data.append(response_html)
     
-    print 'tried '+ environ['PATH_INFO']
+    # print 'tried '+ environ['PATH_INFO']
     
     
     # start_response before building from template
