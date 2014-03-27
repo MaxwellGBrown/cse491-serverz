@@ -1,9 +1,10 @@
 This is a CSE 491/Web dev project; see http://msu-web-dev.readthedocs.org/.
 
-There are 3 sub-versions of server.py:
-1. server.py is the standard that runs app
-2. server-qx.py is the WSGI standard test server
-3. server-imageapp.py runs the image WSGI app that uses cookies
+server.py takes three different arguements:
+-A <app name> will run said app. Default is app.py. 
+-p <port #> will run the server on said port. 
+-M is a flag that will run the WSGI middleware which prints all
+   interaction between the server and the component
 
 1. Running server.py on arctic.
 ===============================
