@@ -31,12 +31,12 @@ def handle_connection(conn, port, application):
     while read[-4:] != '\r\n\r\n':
 	read += conn.recv(1)
 	
-    if read[-4:] == '\r\n\r\n':
-	print "READ IS DONE!"
+    # if read[-4:] == '\r\n\r\n':
+	# print "READ IS DONE!"
 	
     # Parse headers
     request, data = read.split('\r\n',1)
-    print read
+    # print read
 
     headers = {}
     for line in data.split('\r\n')[:-2]:
@@ -91,7 +91,7 @@ def handle_connection(conn, port, application):
     
     response_html = application(environ, start_response)
     for html in response_html:
-        print html
+        # print html
         conn.send(html)
     # print 'conn sent!'
     
@@ -112,10 +112,14 @@ def main():
     # handle command line arguments
     parser = argparse.ArgumentParser(description='Run WSGI apps' + \
 				      'by brown308/MaxwellgBrown')
+				      
     parser.add_argument('-A', '--app', default='hw6', nargs='?', \
 			help='Choose a WSGI app to run')
+			
     parser.add_argument('-p', '--port', type=int, help='Choose a port for server', \
 			 default=random.randint(8000,9999), nargs='?')
+    parser.add_argument('-M', '--Middleware', action='store_true', default='false', help="adding the "+ \
+			"-M flag will play communication between the server and components")
     args = parser.parse_args()
     # print args ## print statement to check the arguments
     
@@ -126,6 +130,7 @@ def main():
     
     wsgi_app_name = args.app
     wsgi_app = None
+    
     if args.app == "app":
         import app
         wsgi_app = app.make_app()
@@ -150,13 +155,30 @@ def main():
         p = create_publisher()
         wsgi_app = quixote.get_wsgi_app()
         
+    elif args.app == "quotes":
+        import quotes.apps
+	wsgi_app = quotes.apps.QuotesApp('quotes/quotes.txt', 'quotes/html')
+	
+    elif args.app == "chat":
+        import chat.apps
+	wsgi_app = chat.apps.ChatApp('chat/html')
+	
     else:
-        print "%s is not an exprected server name...\n"
+        print "%s is not an expected server name...\n"
         wsgi_app_name = 'app'
         import app
-        wsgi_app = app.make_app()
- 
+	wsgi_app = app.make_app()
+	
     print 'Using %s as WSGI app...'%(wsgi_app_name)
+    
+    
+    # check the flag for the middleware
+    if args.Middleware:
+        print "Using Middleware Playback!\n"
+        from middleware_playback import MiddlewarePlayback
+        wsgi_app = MiddlewarePlayback(wsgi_app)
+        
+    
     print 'Starting server on', host, port
     print 'The Web server URL for this would be http://%s:%d/' % (host, port)
     s.listen(5)                 # Now wait for client connection.
@@ -178,6 +200,15 @@ def main():
 
 
 
+	    
+            
+            
+            
+            
+            
+            
+            
+            
 ##
 ## RUN MAIN
 ##
