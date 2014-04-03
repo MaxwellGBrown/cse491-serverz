@@ -1,3 +1,23 @@
+~~~~HW9 PROJECT #2 -- WSGI Middleware~~~~
+WSGI Middleware to play back the server and component communication is located
+in middleware_playback.py. It can be run in the server.py using the -M flag.
+
+For example:
+
+    python server.py -A imageapp -p 8000 -M
+
+Will activate the WSGI Playback Middleware with imageapp running on port 8000
+
+~~~~~
+
+2014-03-26  Maxwell Brown
+
+* Completed WSGI Middleware
+* Added middleware_playback.py
+* Added __init__.py to chat and quotes
+* Implemented chat and quotes in server.py
+
+
 2014-03-20 *** HW8 PROJECT 1 ***
 Implemented a template found from that website in the imageapp.
 You'll notice the text is smaller and the background is periwinkle.
