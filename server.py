@@ -118,7 +118,7 @@ def main():
 			
     parser.add_argument('-p', '--port', type=int, help='Choose a port for server', \
 			 default=random.randint(8000,9999), nargs='?')
-    parser.add_argument('-M', '--Middleware', action='store_true', default='false', help="adding the "+ \
+    parser.add_argument('-M', '--Middleware', action='store_true', default=False, help="adding the "+ \
 			"-M flag will play communication between the server and components")
     args = parser.parse_args()
     # print args ## print statement to check the arguments
