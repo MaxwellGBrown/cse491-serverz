@@ -1,3 +1,23 @@
+~~~~HW10 PROJECT #9 -- User login & User image tracking~~~~
+Added a login page and changed the image API to accomodate users in the 
+dictionary.
+
+~~~~HW10 PROJECT #15 -- Account creation, login, and auth~~~~
+Added a registration form on the login.html page. Users are stored in a 
+global dictionary users (probably/definitely a bad idea) with the key
+as a user and the password as the value. Will likely be placeholder
+functionality until SQL DB.
+
+2014-04-03  Maxwell Brown
+* Added login functionality with a global user dictionary (which is probably
+  a bad idea)
+* Changed the image API to accomodate User string keys in the dictionary for 
+  images
+
+2014-04-02  Maxwell Brown
+* Added pseudo login and pseudo register cookie handlers
+* Attempted sqlite implementation. No sucesses.
+
 ~~~~HW9 PROJECT #2 -- WSGI Middleware~~~~
 WSGI Middleware to play back the server and component communication is located
 in middleware_playback.py. It can be run in the server.py using the -M flag.
