@@ -6,15 +6,6 @@ from . import html, image
 import sqlite3, sys
 
 
-### PROBABLY A HORRIBLE IDEA
-##
-#
-global users
-users = dict()
-#
-##
-### HORRIBLE IDEA ABOVE 
-
 class RootDirectory(Directory):
     _q_exports = []
 
@@ -32,39 +23,53 @@ class RootDirectory(Directory):
         request = quixote.get_request()
         print "User: %s Password: %s\n\n"%(request.form['username'], request.form['password'])
         
-        ##conn = sqlite3.connect('image_app.sqlite')
-        ##c = conn.cursor()
-         
-        # if username in db
-        if request.form['username'] in users.keys():
-	  if users[request.form['username']] == request.form['password']:
-	      print "request.form['username'] = %s"%(request.form['username'])
-	      request.response.set_cookie('User', request.form['username'])
-	      return "<p>Login successful! :) <a href='/'> return to index</a></p>"
-	# if both statements are not matched, return bad :(
+        conn = sqlite3.connect('MBimageapp.db')
+	c = conn.cursor()
+	
+	#change to standard text before reading
+	conn.text_factory = str
+	
+	t = (request.form['username'], request.form['password'])
+	for row in c.execute('SELECT * FROM imageapp1 WHERE username=? AND password=?', t):
+	    if (row[0] == request.form['username']) & (row[1] == request.form['password']):
+	        request.response.set_cookie('User', row[0])
+	        # close connection
+	        conn.close()
+	        return "<p>Login successful! :) <a href='/'> return to index</a></p>"
+	    
+	# close connection
+	conn.close()
+	
+	#return unsuccessful
 	return "<p>Login unsuccessful! :( <a href='/'> return to index</a></p>"
-        # request.response.set_cookie('User', request.form['username'])
-        # return successful login!
-        # else
-        # return unsucessful login!
+
         
         
     @export(name='register')
     def register(self):
         request = quixote.get_request()
         if request.form['password'] == request.form['confirm']:
-	    users[request.form['username']] = request.form['password']
+	    conn = sqlite3.connect('MBimageapp.db')
+	    c = conn.cursor()
+	    
+	    #change to standard text before reading
+	    conn.text_factory = str
+	    
+	    s = "INSERT INTO imageapp1 VALUES ('%s','%s', 'NULL')" % (request.form['username'], request.form['password'])
+	    c.execute(s)
+	    
+	    conn.commit()
+	    conn.close()
+	     
 	    # set the new account as the cookie
 	    request.response.set_cookie('User', request.form['username'])
-	    
-	    # return successful message
-	    ##conn = sqlite3.connect('images.sqlite')
-	    ##c = conn.cursor()
-	    ##c.execute("INSERT INTO image_users VALUES ('%s','%s')")
+
 	    return "<p>Account successfully created!<a href='/'> return to index</a></p>"
 	else:
 	    # return failure
 	    return "<p>Account creation was unsucessful :( <a href='/'> return to index</a></p>"
+        
+        
         
     @export(name='logout')    
     def logout(self):

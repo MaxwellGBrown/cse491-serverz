@@ -1,3 +1,6 @@
+2014-04-08  Maxwell Brown
+* Added the cookieapp option in the server.py
+
 ~~~~HW10 PROJECT #9 -- User login & User image tracking~~~~
 Added a login page and changed the image API to accomodate users in the 
 dictionary.

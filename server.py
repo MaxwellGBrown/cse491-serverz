@@ -163,6 +163,10 @@ def main():
         import chat.apps
 	wsgi_app = chat.apps.ChatApp('chat/html')
 	
+    elif args.app == "cookie":
+        import cookieapp
+        wsgi_app = cookieapp.wsgi_app
+	
     else:
         print "%s is not an expected server name...\n"
         wsgi_app_name = 'app'
