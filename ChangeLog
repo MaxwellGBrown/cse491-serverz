@@ -1,3 +1,6 @@
+2014-04-09  Maxwell Brown
+* Migrated to SQLite fxnality
+
 2014-04-08  Maxwell Brown
 * Added the cookieapp option in the server.py
 
