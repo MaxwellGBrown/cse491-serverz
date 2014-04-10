@@ -14,8 +14,7 @@ def add_image(data, user):
     
     conn.commit()
     conn.close()
-
-
+    
 #def get_image(num):
 #    return images[num]
 

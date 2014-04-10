@@ -68,7 +68,11 @@ class RootDirectory(Directory):
 	else:
 	    # return failure
 	    return "<p>Account creation was unsucessful :( <a href='/'> return to index</a></p>"
-        
+	    
+    @export(name='list')
+    def list(self):
+        html.get_template('list.html')
+        values = get_all_images()
         
         
     @export(name='logout')    
@@ -94,6 +98,7 @@ class RootDirectory(Directory):
         image.add_image(data, quixote.get_cookie("User") )
         
         return quixote.redirect('/') # redirects to index
+        
         
     @export(name='image')
     def image(self):
