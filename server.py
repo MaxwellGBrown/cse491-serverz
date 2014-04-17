@@ -167,11 +167,16 @@ def main():
         import cookieapp
         wsgi_app = cookieapp.wsgi_app
 	
+    elif args.app == "flask":
+        import flask_image_app.app
+        wsgi_app = flask_image_app.app.make_app()
+	
     else:
         print "%s is not an expected server name...\n"
         wsgi_app_name = 'app'
         import app
 	wsgi_app = app.make_app()
+	
 	
     print 'Using %s as WSGI app...'%(wsgi_app_name)
     

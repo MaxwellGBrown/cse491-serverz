@@ -1,0 +1,16 @@
+<!doctype html>
+<title>Flask Imageapp</title>
+<h1>Flask Imageapp</h1>
+{% if not session.logged_in %}
+<a href="{{ url_for('login') }}">log in</a>
+{% else %}
+<a href="{{ url_for('logout') }}">log out</a>
+{% endif %}
+
+<ul>
+{% for message in get_flashed_messages() %}
+<li>{{ message }}</li>
+{% endfor %}
+</ul>
+
+{% block body %}{% endblock %}

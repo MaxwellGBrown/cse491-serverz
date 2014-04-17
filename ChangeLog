@@ -1,4 +1,22 @@
-~~~~HW11 PROJECT #16 -- Data persistance w/ SQLite~~~~
+~~~~HW11 PROJECT #1 -- Reimplement imageapp w/ Flask~~~~
+Recreated imageapp w/ Flask. Run with python server -A flask
+*IMPORTANT*
+  Before running flask app, you MUST do the following:
+  $: python
+  >>> import app from flask_image_app
+  >>> app.init_db()
+
+~~~~HW11 PROJECT #5 -- A list of all images as thumbnails~~~~
+Done within the Flask version of the imageapp, because I wanted
+to do it that way (I figured out how to do it while working w/ 
+Flask). 
+
+2014-04-17 Maxwell Brown
+* Implemented flask app for imageapp
+* Added functionality that SHOULD show all uploaded images
+-- Error w/ uploading images: Bad Request :(
+
+~~~~HW10 PROJECT #16 -- Data persistance w/ SQLite~~~~
 Changed existing functionality to work with SQLite and stuff
 * I only did one project this week -- couldn't motivate myself
   to be interested in another one this time.
