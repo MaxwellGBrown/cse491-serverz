@@ -1,7 +1,8 @@
 import os
 import sqlite3
 from flask import Flask, request, session, g, redirect, url_for, abort, \
-                  render_template, flash
+                  render_template, flash, Response
+import sys
     
 
 app = Flask(__name__)
@@ -32,7 +33,7 @@ def make_app():
 @app.route('/')
 def show_entries():
     db = get_db()
-    cur = db.execute('select title, image from flask_images order by id desc')
+    cur = db.execute('select id, title, image from flask_images order by id desc')
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
     
@@ -40,12 +41,11 @@ def show_entries():
 def get_image(image_id):
     db = get_db()
     cur = db.execute('select image from flask_images where id=?', (image_id,) )
-    conn.text_factory = bytes
     # .fetchone() returns a tuple object. The image is in the first index of it.
-    img = c.fetchone()[0]
+    img = cur.fetchone()[0]
     
-    response.set_content_type('image/png')    
-    return img
+    return Response(img, mimetype='image/png')
+    
     
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -53,11 +53,10 @@ def add_entry():
         abort(401)
     
     # change the data from image into a picture... or something
-    the_file = request.form['image']
+    ### ISSUE CAUSED BY THE FOLLOWING 2 LINEZ
+    the_file = request.files['image']
     image = the_file.read(int(1e9))
     
-    title = request.form['title']
-    title = title.encode('latin-1', 'replace')
     
     db = get_db()
     db.text_factory = bytes
@@ -99,6 +98,7 @@ def logout():
 def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
+    rv.text_factory = bytes
     rv.row_factory = sqlite3.Row
     return rv
     
