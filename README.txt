@@ -6,6 +6,12 @@ server.py takes three different arguements:
 -M is a flag that will run the WSGI middleware which prints all
    interaction between the server and the component
 
+***NOTE***
+Before running imageapp, the SQLite3 needs a database to run on.
+Do this by running:
+     python create_db.py 
+
+
 1. Running server.py on arctic.
 ===============================
 

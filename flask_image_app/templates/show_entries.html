@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form  action="{{url_for('add_entry') }}" method=post enctype='multipart/form-data'>
+      Title: <input type=text size=30 name=title><br />
+      Upload a PNG:<br />
+      Filename: <input type=file name=image><br />
+      <input type=submit value=Share>
+    </form>
+      <hr />
+  {% endif %}
+  
+  <ul>
+  {% for entry in entries %}
+  <li><h2>{{entry.title}}</h2> <img height=100 width=100 src="/image/{{entry.id}}" /> </li>
+  {% else %}
+  <li>No entries so far</li>
+  {% endfor %}
+{% endblock %}
+
+        
